@@ -38,6 +38,16 @@ const envSchema = z.object({
 
 const parsed = envSchema.parse(process.env);
 
+if (
+  parsed.NODE_ENV === "production" &&
+  /(localhost|127\.0\.0\.1)/i.test(parsed.DATABASE_URL)
+) {
+  throw new Error(
+    "Invalid DATABASE_URL for production: it points to localhost. " +
+      "Set DATABASE_URL to your managed Postgres connection string (for Render, use Internal Database URL)."
+  );
+}
+
 const toBool = (value) => value === "true" || value === "1";
 
 export const env = {

@@ -51,6 +51,10 @@ app.use((error, req, res, next) => {
 let server;
 
 async function bootstrap() {
+  server = app.listen(env.PORT, () => {
+    logger.info({ port: env.PORT }, "Backend server started.");
+  });
+
   await withRetry(
     async () => {
       await initDb();
@@ -81,10 +85,6 @@ async function bootstrap() {
   }
 
   startCronScheduler();
-
-  server = app.listen(env.PORT, () => {
-    logger.info({ port: env.PORT }, "Backend server started.");
-  });
 }
 
 async function shutdown(signal) {
