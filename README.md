@@ -1,4 +1,6 @@
 # KPPP Live Tenders Dashboard
+<img width="1517" height="1252" alt="image" src="https://github.com/user-attachments/assets/5b4bcef6-6321-4e7f-bf94-4156bb2d8921" />
+
 
 Production-ready full-stack application to scrape and monitor live tenders from the Karnataka Public Procurement Portal (KPPP), store them in PostgreSQL, and display them in a contractor-focused dashboard.
 
