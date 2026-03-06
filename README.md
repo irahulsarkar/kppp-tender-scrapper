@@ -160,6 +160,31 @@ Services:
 - Backend API: `http://localhost:5000`
 - PostgreSQL: `localhost:5432`
 
+## Deploy Backend on Render
+
+This repo now includes Render Blueprint config in `render.yaml` for the backend service.
+
+### Option A: Blueprint (recommended)
+
+1. Push this repo to GitHub.
+2. In Render, use **New +** -> **Blueprint** and select the repo.
+3. Render will create:
+   - Web service: `kppp-tender-backend` (from `backend/`)
+   - PostgreSQL database: `kppp-tender-db`
+4. Set `CORS_ORIGIN` in Render to your frontend URL (for example, your Vercel domain).
+5. Deploy and check health at `/api/health`.
+
+### Option B: Manual Web Service
+
+If you create the service manually, use:
+
+- Root Directory: `backend`
+- Build Command: `npm install --omit=dev`
+- Start Command: `npm run start`
+- Health Check Path: `/api/health`
+
+Use `backend/.env.render.example` as the production env template.
+
 ## Production Notes
 
 - CAPTCHA solving reliability depends on the portal CAPTCHA complexity and provider quality.

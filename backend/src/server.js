@@ -11,6 +11,7 @@ import healthRoutes from "./routes/health.js";
 import tenderRoutes from "./routes/tenders.js";
 import { startCronScheduler, stopCronScheduler } from "./scheduler/cron.js";
 import { runScrapeCycle } from "./services/tenderService.js";
+import { withRetry } from "./utils/retry.js";
 
 const app = express();
 
@@ -50,7 +51,26 @@ app.use((error, req, res, next) => {
 let server;
 
 async function bootstrap() {
-  await initDb();
+  await withRetry(
+    async () => {
+      await initDb();
+    },
+    {
+      attempts: 8,
+      baseDelayMs: 2000,
+      factor: 1.5,
+      onRetry: (error, attempt) => {
+        logger.warn(
+          {
+            attempt,
+            code: error?.code,
+            message: error?.message
+          },
+          "Database init failed during bootstrap. Retrying."
+        );
+      }
+    }
+  );
 
   if (env.SCRAPE_ON_START) {
     try {
@@ -83,6 +103,13 @@ process.on("SIGINT", () => shutdown("SIGINT"));
 process.on("SIGTERM", () => shutdown("SIGTERM"));
 
 bootstrap().catch((error) => {
-  logger.error({ error }, "Failed to bootstrap backend.");
+  logger.error(
+    {
+      error,
+      code: error?.code,
+      message: error?.message
+    },
+    "Failed to bootstrap backend."
+  );
   process.exit(1);
 });
