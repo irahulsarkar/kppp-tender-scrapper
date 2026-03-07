@@ -1,4 +1,4 @@
-# KPPP Live Tenders Dashboard
+# KPPP Live Tenders Dashboard - FOR EDUCATIONAL PURPOSE ONLY.
 <img width="1517" height="1252" alt="image" src="https://github.com/user-attachments/assets/5b4bcef6-6321-4e7f-bf94-4156bb2d8921" />
 
 
